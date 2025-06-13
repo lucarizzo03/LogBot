@@ -1,0 +1,39 @@
+2025-06-13T12:00:01.123Z INFO  [AuthModule] User login successful: userId=12345, ip=192.168.1.10
+2025-06-13T12:00:01.456Z INFO  [AuthModule] User login successful: userId=54321, ip=192.168.1.11
+2025-06-13T12:00:02.001Z WARN  [DBConnection] Slow query detected: duration=350ms, query="SELECT * FROM users WHERE id=12345"
+2025-06-13T12:00:02.100Z WARN  [DBConnection] Slow query detected: duration=480ms, query="SELECT * FROM orders WHERE userId=54321"
+2025-06-13T12:00:02.789Z ERROR [PaymentService] Payment processing failed: orderId=98765, userId=12345, error="Card declined"
+2025-06-13T12:00:03.000Z INFO  [PaymentService] Payment retry started for orderId=98765, userId=12345
+2025-06-13T12:00:03.250Z ERROR [PaymentService] Payment processing failed: orderId=98765, userId=12345, error="Insufficient funds"
+2025-06-13T12:00:04.101Z INFO  [Scheduler] Job 'sendEmailReports' started
+2025-06-13T12:00:04.202Z DEBUG [Scheduler] Email queue size: 23
+2025-06-13T12:00:04.303Z INFO  [Scheduler] Job 'sendEmailReports' completed successfully in 1.2s
+2025-06-13T12:00:05.404Z INFO  [Cache] Cache miss for key: user_12345_profile
+2025-06-13T12:00:05.505Z INFO  [Cache] Cache populated for key: user_12345_profile
+2025-06-13T12:00:06.606Z ERROR [API] Unexpected response status: 500 Internal Server Error on GET /api/orders/98765
+2025-06-13T12:00:07.707Z INFO  [AuthModule] User logout: userId=12345
+2025-06-13T12:00:08.800Z INFO  [AuthModule] User login successful: userId=67890, ip=192.168.1.12
+2025-06-13T12:00:09.001Z INFO  [OrderService] New order placed: orderId=112233, userId=67890, total=125.50
+2025-06-13T12:00:09.250Z DEBUG [OrderService] Inventory check passed for orderId=112233
+2025-06-13T12:00:09.500Z INFO  [Shipping] Shipping label created for orderId=112233, carrier=UPS
+2025-06-13T12:00:10.000Z WARN  [Shipping] Shipping delay reported for orderId=445566, reason="Weather"
+2025-06-13T12:00:10.500Z INFO  [Scheduler] Job 'syncInventory' started
+2025-06-13T12:00:10.700Z INFO  [Scheduler] Job 'syncInventory' completed in 0.4s
+2025-06-13T12:00:11.000Z INFO  [AuthModule] Password reset requested: userId=54321
+2025-06-13T12:00:11.200Z INFO  [EmailService] Password reset email sent to userId=54321
+2025-06-13T12:00:11.500Z DEBUG [AuthModule] Token generated for userId=54321, tokenId=abcdef123456
+2025-06-13T12:00:12.000Z INFO  [API] GET /api/products returned 200 in 75ms
+2025-06-13T12:00:12.500Z ERROR [API] POST /api/cart failed with status 400: "Invalid product ID"
+2025-06-13T12:00:13.000Z INFO  [CartService] Product added to cart: productId=987, userId=67890
+2025-06-13T12:00:13.250Z DEBUG [CartService] Cart now has 3 items for userId=67890
+2025-06-13T12:00:13.750Z WARN  [DBConnection] Connection pool exhausted, waiting for available connection
+2025-06-13T12:00:14.000Z INFO  [DBConnection] Connection pool cleared and reset
+2025-06-13T12:00:14.500Z INFO  [Cache] Cache cleared due to config change
+2025-06-13T12:00:15.000Z ERROR [PaymentService] Payment gateway timeout on transactionId=789012, retrying...
+2025-06-13T12:00:15.500Z INFO  [PaymentService] Payment gateway connection re-established
+2025-06-13T12:00:16.000Z INFO  [PaymentService] Payment completed successfully: transactionId=789012, userId=67890
+2025-06-13T12:00:16.500Z INFO  [AuthModule] User logout: userId=67890
+2025-06-13T12:00:17.000Z DEBUG [SystemMonitor] CPU usage: 75%, Memory usage: 68%
+2025-06-13T12:00:17.500Z DEBUG [SystemMonitor] Disk usage: 80%, Network traffic: 120MB/s
+2025-06-13T12:00:18.000Z INFO  [Scheduler] Job 'backupDatabase' started
+2025-06-13T12:00:19.500Z INFO  [Scheduler] Job 'backupDatabase' completed in 1.5m

@@ -16,9 +16,11 @@ function App() {
     try {
       const res = await fetch('http://localhost:3200/files');
       const data = await res.json();
-      setFiles(data.files);
+      console.log('📦 Fetched file list:', data);
+      setFiles(data); // just set the array directly
     } catch (error) {
       console.error('Failed to fetch files', error);
+      setFiles([]);
     }
   };
 
@@ -70,6 +72,25 @@ function App() {
     setLoading(false);
   };
 
+  const handleDelete = async () => {
+    if (!selectedFile) return;
+    setLoading(true);
+    try {
+      const res = await fetch(`http://localhost:3200/files/${selectedFile}`, {
+        method: 'DELETE',
+      });
+      if (res.ok) {
+        setFiles(files.filter(file => file.key !== selectedFile));
+        setSelectedFile(null);
+      } else {
+        console.error('Failed to delete file');
+      }
+    } catch (error) {
+      console.error('Error during file deletion:', error);
+    }
+    setLoading(false);
+  };
+
   return (
     <div style={{ maxWidth: 600, margin: 'auto', padding: 20 }}>
       <h1>LogBot</h1>
@@ -84,18 +105,17 @@ function App() {
       <section>
         <h2>Uploaded Files</h2>
         <ul>
-          {files.length === 0 && <li>No files uploaded yet.</li>}
-          {files.map((fileKey) => (
-            <li key={fileKey}>
+          {files.map((file) => (
+            <li key={file.key}>
               <label>
                 <input
                   type="radio"
                   name="selectedFile"
-                  value={fileKey}
-                  checked={selectedFile === fileKey}
-                  onChange={() => setSelectedFile(fileKey)}
+                  value={file.key}
+                  checked={selectedFile === file.key}
+                  onChange={() => setSelectedFile(file.key)}
                 />
-                {fileKey}
+                {file.key}
               </label>
             </li>
           ))}
@@ -108,6 +128,15 @@ function App() {
         </button>
         <pre style={{ whiteSpace: 'pre-wrap', marginTop: 20 }}>{analysisResult}</pre>
       </section>
+
+      <section>
+        <h2>Delete Log File</h2>
+        <button onClick={handleDelete} disabled={!selectedFile || loading}>
+          {loading ? 'Deleting...' : 'Delete Selected File'}
+        </button>
+      </section>
+
+
     </div>
   );
 }
