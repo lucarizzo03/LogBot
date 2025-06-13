@@ -75,6 +75,27 @@ app.post('/analyze', async (req, res) => {
     }
 });
 
+// List files endpoint
+app.get('/files', async (req, res) => {
+  const params = {
+    Bucket: process.env.AWS_S3_BUCKET,
+  };
+
+  try {
+    const data = await s3.listObjectsV2(params).promise();
+    const files = data.Contents.map(file => ({
+      key: file.Key,
+      lastModified: file.LastModified,
+      size: file.Size,
+    }));
+    res.json(files);
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to list files', details: err.message });
+  }
+});
+
+// TODO: Delete file endpoint
+
 
 const PORT = process.env.PORT || 3200;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
