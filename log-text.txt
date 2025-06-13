@@ -1,0 +1,6 @@
+2025-06-13 10:00:01 INFO Starting system check...
+2025-06-13 10:00:02 WARN Disk space low on /dev/sda1
+2025-06-13 10:00:05 ERROR Failed to connect to database
+2025-06-13 10:00:10 INFO Retrying connection...
+2025-06-13 10:00:15 INFO Connection established
+2025-06-13 10:05:00 INFO System check completed successfully
