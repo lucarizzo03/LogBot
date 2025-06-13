@@ -94,7 +94,25 @@ app.get('/files', async (req, res) => {
   }
 });
 
-// TODO: Delete file endpoint
+// Delete file endpoint
+app.delete('/files/:key', async (req, res) => {
+  const { key } = req.params;
+
+  if (!key) return res.status(400).json({ error: 'No file key provided' });
+
+  const params = {
+    Bucket: process.env.AWS_S3_BUCKET,
+    Key: key,
+  };
+
+  try {
+    await s3.deleteObject(params).promise();
+    res.json({ message: 'File deleted successfully' });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to delete file', details: err.message });
+  }
+});
+
 
 
 const PORT = process.env.PORT || 3200;
