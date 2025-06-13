@@ -49,12 +49,10 @@ app.post('/upload', upload.single('logfile'), async (req, res) => {
 app.post('/analyze', async (req, res) => {
     const { key } = req.body;
 
-    if (!key) {
-        return res.status(400).json({ error: 'Missing S3 key to analyze' });
-    }
+    if (!key) return res.status(400).json({ error: 'No file key provided' });
     
-    // Fetch the log file from S3
     try {
+        // Fetch log file from S3
         const params = {
             Bucket: process.env.AWS_S3_BUCKET,
             Key: key,
@@ -63,20 +61,19 @@ app.post('/analyze', async (req, res) => {
         const data = await s3.getObject(params).promise();
         const logContent = data.Body.toString('utf-8');
 
-        const prompt = `Analyze the following system log for errors, warnings, and important events:\n\n${logContent}`;
-
-        const completion = await openai.createChatCompletion({
-            model: "gpt-4",
-            messages: [{ role: "user", content: prompt }],
+        // Send to OpenAI for analysis
+        const response = await openai.chat.completions.create({
+        model: "gpt-4",
+        messages: [
+                { role: "system", content: "You are a helpful assistant that specializes in analyzing system logs." },
+                { role: "user", content: `Analyze this log file:\n\n${logContent}` }
+            ],
         });
 
-        const analysis = completion.data.choices[0].message.content;
-
-        res.json({ analysis });
+        res.json({ result: response.choices[0].message.content });
     } catch (err) {
         res.status(500).json({ error: 'Failed to analyze log', details: err.message });
     }
-
 });
 
 
