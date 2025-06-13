@@ -1,7 +1,7 @@
 const express = require('express');
 const multer = require('multer');
 const AWS = require('aws-sdk');
-const { Configuration, OpenAIApi } = require("openai");
+const { OpenAI } = require("openai");
 const cors = require('cors');
 require('dotenv').config();
 
@@ -21,10 +21,9 @@ const s3 = new AWS.S3({
 });
 
 // OpenAI API configuration
-const configuration = new Configuration({
+const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
-const openai = new OpenAIApi(configuration);
 
 
 // File upload endpoint
