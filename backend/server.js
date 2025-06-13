@@ -25,7 +25,6 @@ const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
-
 // File upload endpoint
 app.post('/upload', upload.single('logfile'), async (req, res) => {
   if (!req.file) return res.status(400).json({ error: 'No file uploaded' });
